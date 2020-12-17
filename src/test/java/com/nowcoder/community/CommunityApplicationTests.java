@@ -54,6 +54,7 @@ class CommunityApplicationTests implements ApplicationContextAware {
 
 	@Test
 	public  void testBeanConfig(){
+		//Java 自带类可通过config类声明，这样就可以对其扩展并由sprig获取扩展的Bean
 		SimpleDateFormat simpleDateFormat=
 				applicationContext.getBean(SimpleDateFormat.class);
 		System.out.println(simpleDateFormat.format(new Date()));

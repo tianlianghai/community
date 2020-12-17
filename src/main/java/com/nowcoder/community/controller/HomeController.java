@@ -25,6 +25,7 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
+    //之所以不直接用静态页面是为了：动态显示帖子列表
     @RequestMapping(path = "/index",method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page){
         //方法调用前，springMVC会自动实例化Model和Page，并且会把Page对象放入Model
@@ -48,6 +49,12 @@ public class HomeController {
         model.addAttribute("page",page);
         model.addAttribute("discussPosts",discussPosts);
         return  "/index";
+    }
+
+    //不写index自动跳到index
+    @RequestMapping(path = " ")
+    public String noPathToIndex(){
+        return "redirect:/index";
     }
 
 }

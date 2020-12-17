@@ -1,8 +1,11 @@
-$(function(){
-	$("form").submit(check_data);
-	$("input").focus(clear_error);
-});
 
+
+// $(function(){
+// 	$("form").submit(check_data);
+// 	$("input").focus(clear_error);
+// });
+$("form").submit(check_data);
+$("input").focus(clear_error);
 function check_data() {
 	var pwd1 = $("#password").val();
 	var pwd2 = $("#confirm-password").val();
