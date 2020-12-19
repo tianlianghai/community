@@ -4,7 +4,6 @@ import com.google.code.kaptcha.Producer;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityConstance;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
@@ -92,7 +90,7 @@ public class LoginController implements CommunityConstance {
         session.setAttribute("kaptcha",text);
 
         //将图片输出给浏览器
-        response.setContentType("image/png");
+        response.setContentType("image/.png");
         try (ServletOutputStream os = response.getOutputStream()) {
             ImageIO.write(image,"png",os);
         } catch (IOException e) {

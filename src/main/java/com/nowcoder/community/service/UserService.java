@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import javax.jws.Oneway;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -169,5 +168,16 @@ public class UserService implements CommunityConstance {
     //退出
     public void logout(String ticket){
         loginTicketMapper.updateStatus(ticket,1);
+    }
+
+    public LoginTicket findLoginTicket(String ticket) {
+        LoginTicket loginTicket=loginTicketMapper.selectByTicket(ticket);
+        return loginTicket;
+    }
+
+    //更新用户头像路径
+    public int updateHeaderUrl(int userId,String headerUrl){
+        userMapper.updateHeader(userId,headerUrl);
+        return 1;
     }
 }
