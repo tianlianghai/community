@@ -90,7 +90,7 @@ public class LoginController implements CommunityConstance {
         session.setAttribute("kaptcha",text);
 
         //将图片输出给浏览器
-        response.setContentType("image/.png");
+        response.setContentType("image/png");
         try (ServletOutputStream os = response.getOutputStream()) {
             ImageIO.write(image,"png",os);
         } catch (IOException e) {

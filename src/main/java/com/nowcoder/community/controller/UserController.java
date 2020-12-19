@@ -113,4 +113,19 @@ public class UserController {
         }
 
     }
+
+
+    /*
+    更改用户密码
+     */
+    @RequestMapping(path = "/updatePassword",method = RequestMethod.POST)
+    public String updatePassword(String oldPwd,String newPwd,Model model){
+        User user=hostHolder.getUser();
+        if (userService.updatePassword(user.getId(),oldPwd,newPwd)==0) {
+            model.addAttribute("passwordMsg", "原密码不正确");
+            return "/site/setting";
+        }
+        model.addAttribute("passwordMsg", "密码修改成功！");
+        return "/site/setting";
+    }
 }

@@ -113,7 +113,7 @@ public class UserService implements CommunityConstance {
             return ACTIVATION_FAIL;
         } else {
             //激活成功
-            userMapper.updateStatus(userId,1);
+            userMapper.updateStatus(userId, 1);
             return ACTIVATION_SUCCESS;
         }
     }
@@ -141,43 +141,57 @@ public class UserService implements CommunityConstance {
             return map;
         }
 
-        if (user.getStatus()==0){
-            map.put("usernameMsg","该账号未激活!");
+        if (user.getStatus() == 0) {
+            map.put("usernameMsg", "该账号未激活!");
             return map;
         }
 
-        password=CommunityUtil.md5(password+user.getSalt());
-        if (!user.getPassword().equals(password)){
-            map.put("passwordMsg","密码不正确!");
+        password = CommunityUtil.md5(password + user.getSalt());
+        if (!user.getPassword().equals(password)) {
+            map.put("passwordMsg", "密码不正确!");
             return map;
         }
 
         //生成登陆凭证
-        LoginTicket loginTicket=new LoginTicket();
+        LoginTicket loginTicket = new LoginTicket();
         loginTicket.setUserId(user.getId());
         loginTicket.setTicket(CommunityUtil.generateUUID());
         loginTicket.setStatus(0);
-        loginTicket.setExpired(new Date(System.currentTimeMillis()+expiredSeconds* 1000L));
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000L));
         loginTicketMapper.insertLoginTicker(loginTicket);
 
-        map.put("ticket",loginTicket.getTicket());
+        map.put("ticket", loginTicket.getTicket());
         return map;
 
     }
 
     //退出
-    public void logout(String ticket){
-        loginTicketMapper.updateStatus(ticket,1);
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatus(ticket, 1);
     }
 
     public LoginTicket findLoginTicket(String ticket) {
-        LoginTicket loginTicket=loginTicketMapper.selectByTicket(ticket);
+        LoginTicket loginTicket = loginTicketMapper.selectByTicket(ticket);
         return loginTicket;
     }
 
     //更新用户头像路径
-    public int updateHeaderUrl(int userId,String headerUrl){
-        userMapper.updateHeader(userId,headerUrl);
+    public int updateHeaderUrl(int userId, String headerUrl) {
+        userMapper.updateHeader(userId, headerUrl);
         return 1;
+    }
+
+    /*
+    更改密码
+     */
+    public int updatePassword(int userId, String oldPwd, String newPwd) {
+        User user = userMapper.selectById(userId);
+        oldPwd = CommunityUtil.md5(oldPwd + user.getSalt());
+        if (!oldPwd.equals(user.getPassword())){
+            return 0;
+        }
+        userMapper.updatePassword(user.getId(),CommunityUtil.md5(newPwd+user.getSalt()));
+        return 1;
+
     }
 }
