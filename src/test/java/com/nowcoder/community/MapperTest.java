@@ -1,28 +1,20 @@
 package com.nowcoder.community;
 
 
-import com.nowcoder.community.dao.AlphaDao;
 import com.nowcoder.community.dao.DiscussPostMapper;
 import com.nowcoder.community.dao.LoginTicketMapper;
 import com.nowcoder.community.dao.UserMapper;
 import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
-import com.nowcoder.community.service.AlphaService;
-
+import com.nowcoder.community.util.SensitiveFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.rmi.runtime.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -34,8 +26,13 @@ public class MapperTest {
     @Autowired
     UserMapper userMapper;
 
+
+    @Autowired
+    SensitiveFilter sensitiveFilter;
     @Autowired
     LoginTicketMapper loginTicketMapper;
+
+
     @Test
     public  void  testSelectUser(){
         User user=userMapper.selectById(101);
