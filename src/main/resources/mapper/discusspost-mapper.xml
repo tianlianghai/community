@@ -26,7 +26,7 @@
         , score
     </sql>
 
-    <select id="selectDiscussPosts" resultType="DiscussPost">
+    <select id="selectDiscussPosts" resultType="com.nowcoder.community.entity.DiscussPost">
         select
         <include refid="selectFields">
         </include>
@@ -58,4 +58,12 @@
     </include> from discuss_post
         where id=#{id}
     </select>
+
+    <update id="updateCommentCount">
+        update discuss_post
+        set comment_count=#{commentCount}
+        where id=#{id}
+    </update>
+
+
 </mapper>

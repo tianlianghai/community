@@ -10,7 +10,7 @@ public class Page {
     //数据总数
     private int rows;
 
-    //路径，用于服用链接
+    //路径，用于复用链接
     private String path;
 
     public int getCurrent() {
