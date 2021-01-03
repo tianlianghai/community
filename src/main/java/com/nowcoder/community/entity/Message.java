@@ -9,7 +9,7 @@ public class Message {
     private int toId;
     private String conversationId;
     private String content;
-    private int status;
+    private int status;//为0表示未读，1表示已读，2表示删除
     private Date createTime;
 
     @Override

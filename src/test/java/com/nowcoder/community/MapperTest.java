@@ -3,9 +3,11 @@ package com.nowcoder.community;
 
 import com.nowcoder.community.dao.DiscussPostMapper;
 import com.nowcoder.community.dao.LoginTicketMapper;
+import com.nowcoder.community.dao.MessageMapper;
 import com.nowcoder.community.dao.UserMapper;
 import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.entity.LoginTicket;
+import com.nowcoder.community.entity.Message;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.util.SensitiveFilter;
 import org.junit.Test;
@@ -32,7 +34,8 @@ public class MapperTest {
     @Autowired
     LoginTicketMapper loginTicketMapper;
 
-
+    @Autowired
+    MessageMapper messageMapper;
     @Test
     public  void  testSelectUser(){
         User user=userMapper.selectById(101);
@@ -106,5 +109,44 @@ public class MapperTest {
         loginTicketMapper.updateStatus("abc",1);
         loginTicket=loginTicketMapper.selectByTicket("abc");
         System.out.println(loginTicket);
+    }
+
+    @Test
+    public void testSelectLetters(){
+
+        int userId=111;
+        String conversationId="111_131";
+        //查询某个用户所有会话列表的第一条消息
+        List<Message> messages=messageMapper.selectConversations(userId,0,20);
+        System.out.println("用户"+userId+"的消息列表为");
+        for (Message message:
+             messages) {
+            System.out.println(message);
+        }
+
+        printRiver();
+        //查询某用户会话数量
+        int count=messageMapper.selectConversationCount(111);
+        System.out.println("用户 "+"的会话数量为"+count);
+        printRiver();
+
+        messages=messageMapper.selectLetters("111_112",0,10);
+        for (Message message:
+                messages) {
+            System.out.println(message);
+        }
+        printRiver();
+
+        count= messageMapper.selectLetterCount("111_112");
+        System.out.println(count);
+        printRiver();
+
+        count= messageMapper.selectUnreadLetter(131,"111_131");
+        System.out.println(count);
+    }
+
+
+    void printRiver(){
+        System.out.println("********************************************");
     }
 }
