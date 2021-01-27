@@ -45,6 +45,8 @@ public class UserService implements CommunityConstance {
         return userMapper.selectById(id);
     }
 
+    public User findUserByName(String name){return userMapper.selectByName(name);}
+
     public Map<String, Object> register(User user) {
         Map<String, Object> map = new HashMap<>();
 
@@ -194,4 +196,5 @@ public class UserService implements CommunityConstance {
         return 1;
 
     }
+
 }

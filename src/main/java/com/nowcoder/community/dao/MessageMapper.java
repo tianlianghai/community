@@ -23,4 +23,10 @@ public interface MessageMapper {
     //查询未读消息数量，若不带conversationId参数，则为所有未读，若带上，则为该消息未读
     int selectUnreadLetter(int userId,String conversationId);
 
+    //插入消息
+    int insertLetter(Message message);
+
+    //更新消息状态
+    int updateLetterStatus(List<Integer> ids,int status);
+
 }
