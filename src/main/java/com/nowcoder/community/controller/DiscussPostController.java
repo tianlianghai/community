@@ -6,6 +6,7 @@ import com.nowcoder.community.entity.Page;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.CommentService;
 import com.nowcoder.community.service.DiscussPostService;
+import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityConstance;
 import com.nowcoder.community.util.CommunityUtil;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.jvm.hotspot.runtime.posix.POSIXSignals;
 
 import java.util.*;
 
@@ -35,6 +37,9 @@ public class DiscussPostController implements CommunityConstance {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    LikeService likeService;
 
     //尝试使用过滤器，这里本是用hostholder直接获取
     //@LoginRequired
@@ -64,6 +69,14 @@ public class DiscussPostController implements CommunityConstance {
         User user=userService.findUserById(post.getUserId());
         model.addAttribute("user",user);
 
+        //点赞数量
+        Long likeCount=likeService.findEntityLikeCount(ENTITY_TYPE_POST,discussPostId);
+        model.addAttribute("likeCount",likeCount);
+
+        //点赞状态
+        int likeStatus=hostHolder.getUser()==null?0:likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_POST,discussPostId);
+        model.addAttribute("likeStatus",likeStatus);
+
         //评论分页信息
         page.setLimit(5);
         //复用路径，用于拼凑分页链接，后面将来会接一个currentPage，并传入Page对象
@@ -87,6 +100,9 @@ public class DiscussPostController implements CommunityConstance {
                 Map<String,Object> commentVo=new HashMap<>();
                 commentVo.put("comment",comment);
                 commentVo.put("user",userService.findUserById(comment.getUserId()));
+                commentVo.put("likeCount",likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT,comment.getId()));
+                likeStatus=(hostHolder.getUser()==null)?0:likeService.findEntityLikeStatus(hostHolder.getUser().getId(),ENTITY_TYPE_COMMENT,comment.getId());
+                commentVo.put("likeStatus",likeStatus);
 
                 //回复列表，对评论的评论，也是属于一条评论的对象
                 List<Comment> replyList=commentService.findCommentsByEntity(
@@ -101,6 +117,9 @@ public class DiscussPostController implements CommunityConstance {
                         //回复目标
                         User target=reply.getTargetId()==0?null:userService.findUserById(reply.getTargetId());
                         replyVo.put("target",target);
+                        replyVo.put("likeCount",likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT,reply.getId()));
+                        likeStatus=hostHolder.getUser()==null?0:likeService.findEntityLikeStatus(hostHolder.getUser().getId(),ENTITY_TYPE_COMMENT, reply.getId());
+                        replyVo.put("likeStatus",likeStatus);
 
                         replyVoList.add(replyVo);
                     }

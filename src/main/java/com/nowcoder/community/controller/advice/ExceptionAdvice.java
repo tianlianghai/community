@@ -20,10 +20,12 @@ public class ExceptionAdvice{
 
     @ExceptionHandler({Exception.class})
     public void handleException(Exception e, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        logger.error("Service exception:"+e.getMessage());
-        for (StackTraceElement element:e.getStackTrace()){
-            logger.error(element.toString());
-        }
+//        logger.error("e.toString():"+e.toString());
+        logger.error(e.getMessage(),e);
+//        logger.error("Service exception:"+e.getMessage());
+//        for (StackTraceElement element:e.getStackTrace()){
+//            logger.error(element.toString());
+//        }
 
         //判断是异步请求还是普通请求
         //普通返回html
