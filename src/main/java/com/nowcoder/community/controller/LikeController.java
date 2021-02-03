@@ -25,11 +25,11 @@ public class LikeController {
     //异步请求实现局部刷新点赞
     @RequestMapping(path = "/like",method = RequestMethod.POST)
     @ResponseBody
-    public String like(int entityType,int entityId){
+    public String like(int entityType,int entityId,int targetId){
         User user=hostHolder.getUser();
 
         //点赞
-        likeService.like(user.getId(),entityType,entityId);
+        likeService.like(user.getId(),entityType,entityId,targetId);
         //数量
         long likeCount= likeService.findEntityLikeCount(entityType,entityId);
         //状态

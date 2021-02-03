@@ -2,7 +2,10 @@ package com.nowcoder.community.controller;
 
 import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.service.FollowService;
+import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.service.UserService;
+import com.nowcoder.community.util.CommunityConstance;
 import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +25,7 @@ import java.io.*;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements CommunityConstance {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -40,6 +43,12 @@ public class UserController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    LikeService likeService;
+
+    @Autowired
+    FollowService followService;
 
     /*
     用户设置
@@ -95,21 +104,21 @@ public class UserController {
      */
     @RequestMapping(path = "/header/{fileName}", method = RequestMethod.GET)
     public void getHeader(@PathVariable("fileName") String fileName, HttpServletResponse response) {
-        fileName=uploadPath+"/"+fileName;
-        String suffix=fileName.substring(fileName.lastIndexOf("."));
+        fileName = uploadPath + "/" + fileName;
+        String suffix = fileName.substring(fileName.lastIndexOf("."));
         //响应图片
-        response.setContentType("image/"+suffix);
+        response.setContentType("image/" + suffix);
         try (
-                FileInputStream fis=new FileInputStream(fileName);
-                OutputStream os=response.getOutputStream();
-        ){
-            byte[] buffer=new byte[1024];
-            int b=0;
-            while ((b=fis.read(buffer)) != -1) {
-                os.write(buffer,0,b);
+                FileInputStream fis = new FileInputStream(fileName);
+                OutputStream os = response.getOutputStream();
+        ) {
+            byte[] buffer = new byte[1024];
+            int b = 0;
+            while ((b = fis.read(buffer)) != -1) {
+                os.write(buffer, 0, b);
             }
         } catch (IOException e) {
-            logger.error("读取头像失败",e.getMessage());
+            logger.error("读取头像失败", e.getMessage());
         }
 
     }
@@ -118,14 +127,45 @@ public class UserController {
     /*
     更改用户密码
      */
-    @RequestMapping(path = "/updatePassword",method = RequestMethod.POST)
-    public String updatePassword(String oldPwd,String newPwd,Model model){
-        User user=hostHolder.getUser();
-        if (userService.updatePassword(user.getId(),oldPwd,newPwd)==0) {
+    @RequestMapping(path = "/updatePassword", method = RequestMethod.POST)
+    public String updatePassword(String oldPwd, String newPwd, Model model) {
+        User user = hostHolder.getUser();
+        if (userService.updatePassword(user.getId(), oldPwd, newPwd) == 0) {
             model.addAttribute("passwordMsg", "原密码不正确");
             return "/site/setting";
         }
         model.addAttribute("passwordMsg", "密码修改成功！");
         return "/site/setting";
+    }
+
+    /*
+    用户主页
+     */
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在!");
+        }
+
+        int likeCount = likeService.findUserLikedCount(userId);
+
+        //关注数量
+        Long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount", followeeCount);
+
+        //粉丝数量
+        Long followerCount= followService.findFollowerCount(ENTITY_TYPE_USER,userId);
+        model.addAttribute("followerCount",followerCount);
+        //是否已关注当前用户
+        boolean hasFollowed=false;
+        if (hostHolder.getUser()!=null){
+            hasFollowed= followService.hasFollowed(hostHolder.getUser().getId(),ENTITY_TYPE_USER,userId);
+        }
+        model.addAttribute("hasFollowed",hasFollowed);
+
+        model.addAttribute("user", user);
+        model.addAttribute("likeCount", likeCount);
+        return "/site/profile";
     }
 }

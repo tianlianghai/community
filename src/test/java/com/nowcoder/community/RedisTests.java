@@ -1,5 +1,6 @@
 package com.nowcoder.community;
 
+import com.nowcoder.community.service.LikeService;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,9 @@ public class RedisTests {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    LikeService likeService;
 
     @Test
     public void testStrings() {
@@ -128,6 +132,11 @@ public class RedisTests {
         });
 
         System.out.println(obj);
+    }
+
+    @Test
+    public void testNullToInt(){
+        likeService.findUserLikedCount(33);
     }
 
 
