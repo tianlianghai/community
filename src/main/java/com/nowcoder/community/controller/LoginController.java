@@ -121,17 +121,16 @@ public class LoginController implements CommunityConstance {
                         @CookieValue("kaptchaOwner")String kaptchaOwner){
 
         //检查验证码
-//        String kaptcha= (String) session.getAttribute("kaptcha");
         String kaptcha=null;
         if (StringUtils.isNotBlank(kaptchaOwner)){
             String redisKey=RedisKeyUtil.getKaptchaKey(kaptchaOwner);
             kaptcha=(String) redisTemplate.opsForValue().get(redisKey);
         }
 
-        if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)) {
-            model.addAttribute("codeMsg","验证码不正确");
-            return "/site/login";
-        }
+//        if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)) {
+//            model.addAttribute("codeMsg","验证码不正确");
+//            return "/site/login";
+//        }
 
         //检查账号密码
         int expiredSeconds=rememberMe?REMEMBER_ME_EXPIRED_SECONDS:DEFAULT_EXPIRED_SECONDS;

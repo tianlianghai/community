@@ -49,7 +49,7 @@ public class UserService implements CommunityConstance {
     public User findUserById(int id) {
         User user=getCache(id);
         if (user==null){
-            initCache(id);
+            user=initCache(id);
         }
         return user;
     }

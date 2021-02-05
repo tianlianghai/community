@@ -44,4 +44,24 @@ public interface CommunityConstance {
      * 实体类型：用户
      */
     int ENTITY_TYPE_USER=3;
+
+    /**
+     * 主题:评论
+     */
+    String TOPIC_COMMENT="comment";
+
+    /**
+     * 主题:点赞
+     */
+    String TOPIC_LIKE="like";
+
+    /**
+     * 主题:关注
+     */
+    String TOPIC_FOLLOW="follow";
+
+    /**
+     * 用户:系统用户ID
+     */
+    int ID_SYSTEM=1;
 }
