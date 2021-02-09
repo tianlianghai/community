@@ -64,4 +64,9 @@ public interface CommunityConstance {
      * 用户:系统用户ID
      */
     int ID_SYSTEM=1;
+
+    /**
+     * 主题:发布贴纸
+     */
+    String TOPIC_PUBLISH="publish";
 }

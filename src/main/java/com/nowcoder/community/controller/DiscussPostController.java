@@ -1,9 +1,7 @@
 package com.nowcoder.community.controller;
 
-import com.nowcoder.community.entity.Comment;
-import com.nowcoder.community.entity.DiscussPost;
-import com.nowcoder.community.entity.Page;
-import com.nowcoder.community.entity.User;
+import com.nowcoder.community.entity.*;
+import com.nowcoder.community.event.EventProducer;
 import com.nowcoder.community.service.CommentService;
 import com.nowcoder.community.service.DiscussPostService;
 import com.nowcoder.community.service.LikeService;
@@ -41,11 +39,15 @@ public class DiscussPostController implements CommunityConstance {
     @Autowired
     LikeService likeService;
 
+    @Autowired
+    EventProducer eventProducer;
+
     //尝试使用过滤器，这里本是用hostholder直接获取
     //@LoginRequired
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public String addDiscussPost(String title, String content) {
+        User user=hostHolder.getUser();
         if (hostHolder.getUser() == null) {
             return CommunityUtil.getJSONString(1, "您还没有登录哦");
         }
@@ -57,6 +59,14 @@ public class DiscussPostController implements CommunityConstance {
         post.setUserId(hostHolder.getUser().getId());
 
         discussPostService.addDiscussPost(post);
+
+        Event event=new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(user.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(post.getId());
+
+        eventProducer.fireEvent(event);
 
         //报错的情况，将来同一处理
         return CommunityUtil.getJSONString(0, "发布成功");
