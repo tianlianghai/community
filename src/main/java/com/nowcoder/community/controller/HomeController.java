@@ -69,4 +69,8 @@ public class HomeController implements CommunityConstance {
         return "/error/500";
     }
 
+    @RequestMapping(path = "/denied")
+    public String getDeniedPage(){
+        return "/error/404";
+    }
 }

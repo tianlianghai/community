@@ -11,7 +11,6 @@ public class CommunityApplication {
 	@PostConstruct
 	public void init(){
 		//解决netty启动冲突
-		System.out.println("h************ello");
 		System.setProperty("es.set.netty.runtime.available.processors","false");
 	}
 

@@ -81,13 +81,13 @@
             <charset>utf-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>debug</level>
+            <level>error</level>
         </filter>
     </appender>
 
-    <logger name="com.nowcoder.community" level="debug"/>
+    <logger name="com.nowcoder.community" level="error"/>
 
-    <root level="info">
+    <root level="error">
         <appender-ref ref="FILE_ERROR"/>
         <appender-ref ref="FILE_WARN"/>
         <appender-ref ref="FILE_INFO"/>

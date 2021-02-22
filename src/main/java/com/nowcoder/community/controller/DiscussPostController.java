@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sun.jvm.hotspot.runtime.posix.POSIXSignals;
 
 import java.util.*;
 
@@ -86,6 +85,7 @@ public class DiscussPostController implements CommunityConstance {
         //点赞状态
         int likeStatus=hostHolder.getUser()==null?0:likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_POST,discussPostId);
         model.addAttribute("likeStatus",likeStatus);
+
 
         //评论分页信息
         page.setLimit(5);
