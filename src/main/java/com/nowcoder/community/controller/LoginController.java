@@ -128,6 +128,7 @@ public class LoginController implements CommunityConstance {
             kaptcha=(String) redisTemplate.opsForValue().get(redisKey);
         }
 
+        //开发阶段跳过验证码,正式上线取消注释
 //        if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)) {
 //            model.addAttribute("codeMsg","验证码不正确");
 //            return "/site/login";

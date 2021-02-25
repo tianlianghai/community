@@ -151,4 +151,65 @@ public class DiscussPostController implements CommunityConstance {
     }
 
 
+    /**
+     * 置顶
+     */
+    @RequestMapping(path = "/top",method = RequestMethod.POST)
+    @ResponseBody
+    public String setTop(int id){
+        discussPostService.updateType(id,1);
+
+        Event event=new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+
+        eventProducer.fireEvent(event);
+
+        return CommunityUtil.getJSONString(0,"成功置顶");
+
+    }
+
+    /**
+     * 加精
+     */
+    @RequestMapping(path = "/wonderful",method = RequestMethod.POST)
+    @ResponseBody
+    public String setWonderful(int id){
+        discussPostService.updateStatus(id,1);
+
+        Event event=new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+
+        eventProducer.fireEvent(event);
+
+        return CommunityUtil.getJSONString(0,"成功加精");
+
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping(path = "/remove",method = RequestMethod.POST)
+    @ResponseBody
+    public String setRemove(int id){
+        discussPostService.updateStatus(id,2);
+
+        Event event=new Event()
+                .setTopic(TOPIC_REMOVE)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+
+        eventProducer.fireEvent(event);
+
+        return CommunityUtil.getJSONString(0,"成功置顶");
+
+    }
+
+
 }

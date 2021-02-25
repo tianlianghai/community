@@ -71,6 +71,11 @@ public interface CommunityConstance {
     String TOPIC_PUBLISH="publish";
 
     /**
+     * 主题:删帖
+     */
+    String TOPIC_REMOVE="remove";
+
+    /**
      * 权限: 普通用户
      */
     String AUTHORITY_USER="user";
